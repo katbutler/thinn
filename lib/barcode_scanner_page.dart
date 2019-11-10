@@ -19,6 +19,10 @@ class BarcodeScannerPageState extends State<BarcodeScannerPage> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
 
+  void _goBack(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +53,37 @@ class BarcodeScannerPageState extends State<BarcodeScannerPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // If the Future is complete, display the preview.
-          return CameraPreview(_controller);
+          return Scaffold(
+            body: Container(
+              color: Colors.black,
+              child: Stack(children: <Widget>[
+                Center(
+                  child: Transform.scale(
+                    scale: (1 / _controller.value.aspectRatio) * 1.5,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: CameraPreview(_controller),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: ClipPath(
+                    child: Container(
+                      color: Colors.black.withOpacity(0.6),
+                    ),
+                    clipper: CardClipper(),
+                  ),
+                ),
+                SafeArea(
+                  child: IconButton(
+                    color: Colors.white,
+                    onPressed: () => _goBack(context),
+                    icon: Icon(Icons.arrow_back_ios),
+                  ),
+                ),
+              ]),
+            ),
+          );
         } else {
           // Otherwise, display a loading indicator.
           return Center(child: CircularProgressIndicator());
@@ -57,4 +91,42 @@ class BarcodeScannerPageState extends State<BarcodeScannerPage> {
       },
     );
   }
+}
+
+class CardBounds extends StatelessWidget {
+  const CardBounds({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+              color: Colors.greenAccent, width: 10.0, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 3,
+    );
+  }
+}
+
+class CardClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromCircle(
+              center: Offset(size.width / 2, size.height / 2),
+              radius: size.width * 0.45),
+          Radius.circular(10),
+        ),
+      )
+      ..addRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height))
+      ..fillType = PathFillType.evenOdd;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
