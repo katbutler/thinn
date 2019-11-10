@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinn/theme.dart';
 
 import 'models/loyalty_card.dart';
 
@@ -43,7 +44,13 @@ class ThinnCard extends StatelessWidget {
       child: Container(
         height: 200,
         color: Colors.amber[300],
-        child: Center(child: Text('${card.name}')),
+        child: Center(
+            child: ListTile(
+                leading: Image.asset("assets/images/logo/wallet.png"),
+                title: Text(
+                  '${card.name}',
+                  style: ThinnTheme.of(context).textTheme.cardTitle,
+                ))),
       ),
     );
   }

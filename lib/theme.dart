@@ -23,22 +23,35 @@ class ThinnTheme extends InheritedWidget {
   bool updateShouldNotify(ThinnTheme old) => data != old.data;
 }
 
+class ThinnTextTheme {
+  ThinnTextTheme({this.cardTitle});
+
+  final TextStyle cardTitle;
+}
+
 @immutable
 class ThinnThemeData {
   factory ThinnThemeData({
     Color successColor,
+    ThinnTextTheme textTheme,
   }) {
     successColor ??= ThinnColors.success[500];
+    textTheme ??= ThinnTextTheme(
+      cardTitle: TextStyle(fontSize: 30.0, fontStyle: FontStyle.normal),
+    );
     return ThinnThemeData.raw(
       successColor: successColor,
+      textTheme: textTheme,
     );
   }
 
   ThinnThemeData.raw({
     @required this.successColor,
+    @required this.textTheme,
   }) : assert(successColor != null);
 
   final Color successColor;
+  final ThinnTextTheme textTheme;
 }
 
 class ThinnColors {
@@ -64,16 +77,16 @@ class ThinnColors {
   static const MaterialColor primary = MaterialColor(
     _primaryValue,
     <int, Color>{
-      50 : Color(0xFFE1F5F0),
-      100 : Color(0xFFB5E5D8),
-      200 : Color(0xFF84D4BF),
-      300 : Color(0xFF53C3A5),
-      400 : Color(0xFF2EB691),
-      500 : Color(_primaryValue),
-      600 : Color(0xFF08A276),
-      700 : Color(0xFF06986B),
-      800 : Color(0xFF058F61),
-      900 : Color(0xFF027E4E),
+      50: Color(0xFFE1F5F0),
+      100: Color(0xFFB5E5D8),
+      200: Color(0xFF84D4BF),
+      300: Color(0xFF53C3A5),
+      400: Color(0xFF2EB691),
+      500: Color(_primaryValue),
+      600: Color(0xFF08A276),
+      700: Color(0xFF06986B),
+      800: Color(0xFF058F61),
+      900: Color(0xFF027E4E),
     },
   );
   static const int _primaryValue = 0xFF09A97E;
@@ -81,21 +94,19 @@ class ThinnColors {
   static const MaterialColor accent = MaterialColor(
     _accentValue,
     <int, Color>{
-      50 : Color(0xFFFFEEE8),
-      100 : Color(0xFFFFD4C7),
-      200 : Color(0xFFFFB8A1),
-      300 : Color(0xFFFF9B7B),
-      400 : Color(0xFFFF855F),
-      500 : Color(_accentValue),
-      600 : Color(0xFFFF683D),
-      700 : Color(0xFFFF5D34),
-      800 : Color(0xFFFF532C),
-      900 : Color(0xFFFF411E),
+      50: Color(0xFFFFEEE8),
+      100: Color(0xFFFFD4C7),
+      200: Color(0xFFFFB8A1),
+      300: Color(0xFFFF9B7B),
+      400: Color(0xFFFF855F),
+      500: Color(_accentValue),
+      600: Color(0xFFFF683D),
+      700: Color(0xFFFF5D34),
+      800: Color(0xFFFF532C),
+      900: Color(0xFFFF411E),
     },
   );
   static const int _accentValue = 0xFFFF7043;
-
-
 
   static const MaterialColor success = MaterialColor(
     _successValue,
