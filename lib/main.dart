@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:thinn/barcode_scanner_page.dart';
 import 'package:thinn/theme.dart';
 
 import 'card_view.dart';
@@ -31,8 +33,15 @@ class ThinnHomePage extends StatefulWidget {
 }
 
 class _ThinnHomePageState extends State<ThinnHomePage> {
-  void _scanBarcode() {
-    debugPrint("Scan Barcode not yet implemented");
+  void _scanBarcode(BuildContext context) async {
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+
+    // Get a specific camera from the list of available cameras.
+    final firstCamera = cameras.first;
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => BarcodeScannerPage(camera: firstCamera)));
   }
 
   @override
@@ -56,7 +65,7 @@ class _ThinnHomePageState extends State<ThinnHomePage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FloatingActionButton(
-          onPressed: _scanBarcode,
+          onPressed: () => _scanBarcode(context),
           tooltip: 'Increment',
           child: Icon(FontAwesomeIcons.barcode),
         ),
